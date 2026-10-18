@@ -1,0 +1,50 @@
+require("dotenv").config();
+
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const Product = require("./models/Product");
+const sampleProducts = require("./data/sampleProducts");
+
+const app = express();
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+}));
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json({ message: "Mini E-commerce API is running" });
+});
+
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/products", require("./routes/productRoutes"));
+
+// Start only after MongoDB connects
+async function startServer() {
+  try {
+    if (!process.env.MONGO_URI || !process.env.JWT_SECRET) {
+      throw new Error("MONGO_URI and JWT_SECRET must be configured");
+    }
+
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected successfully");
+
+    const productCount = await Product.countDocuments();
+    if (productCount === 0) {
+      await Product.insertMany(sampleProducts);
+      console.log(`Added ${sampleProducts.length} starter products`);
+    }
+
+    const port = process.env.PORT || 5000;
+
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`Server running on port $DIL1`);
+    });
+  } catch (error) {
+    console.error("Startup failed:", error.message);
+    process.exit(1);
+  }
+}
+
+startServer();
