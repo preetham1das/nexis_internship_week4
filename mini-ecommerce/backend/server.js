@@ -30,11 +30,33 @@ async function startServer() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected successfully");
 
-    const productCount = await Product.countDocuments();
-    if (productCount === 0) {
-      await Product.insertMany(sampleProducts);
-      console.log(`Added ${sampleProducts.length} starter products`);
+    const existingProducts = await Product.find({}, "name").lean();
+    const existingNames = new Set(existingProducts.map((product) => product.name));
+    const missingProducts = sampleProducts.filter(
+      (product) => !existingNames.has(product.name)
+    );
+
+    if (missingProducts.length > 0) {
+      await Product.insertMany(missingProducts);
+      console.log(`Added ${missingProducts.length} starter products`);
     }
+
+    const productsWithUpdatedImages = sampleProducts.filter((product) =>
+      [
+        "Wireless Charging Pad",
+        "Foldable Tablet Stand",
+        "Weekend Jigsaw Puzzle",
+        "Family Board Game",
+      ].includes(product.name)
+    );
+    await Product.bulkWrite(
+      productsWithUpdatedImages.map((product) => ({
+        updateOne: {
+          filter: { name: product.name },
+          update: { $set: { image: product.image } },
+        },
+      }))
+    );
 
     const port = process.env.PORT || 5000;
 

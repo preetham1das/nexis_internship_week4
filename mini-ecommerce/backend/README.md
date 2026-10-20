@@ -6,3 +6,5 @@
 4. Start the API with `npm run dev` or `npm start`.
 
 Keep `.env` private. It is ignored by Git; only `.env.example` should be committed.
+
+On startup, the backend adds any missing starter products from `data/sampleProducts.js` without duplicating products by name. It also refreshes the image URLs for the wireless charger, tablet stand, jigsaw puzzle, and board game in existing databases.
