@@ -10,7 +10,13 @@ const postRoutes = require("./routes/postRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://nexis-internship-week4.vercel.app",
+  "http://localhost:5173"
+].filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: "1mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
