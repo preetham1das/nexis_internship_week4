@@ -62,6 +62,23 @@ Open the local URL shown by Vite, usually `http://localhost:5173`.
 - `DELETE /api/posts/:id` — delete your own post (JWT required)
 - `GET /api/health` — health check
 
+## Production deployment configuration
+
+On Render, configure these backend environment variables:
+- `MONGO_URI` — your MongoDB Atlas connection string
+- `JWT_SECRET` — a long, random secret
+- `CLIENT_URL` — the exact deployed Vercel origin, for example `https://your-project.vercel.app` (no `/` or route after the hostname)
+
+On Vercel, configure this frontend environment variable for Production:
+```env
+VITE_API_URL=https://karavali-shares-api.onrender.com/api
+```
+
+`VITE_API_URL` is embedded at build time, so redeploy the Vercel project after changing it. The frontend falls back to localhost only during local Vite development; production builds use the deployed API URL if the variable is missing.
+Render's `CLIENT_URL` allows only the configured origin, so Vercel preview deployments need their origin explicitly allowed by the backend CORS configuration.
+
+`GET /api` returning `Route not found` is expected: the API does not define a root `/api` route. Use `GET /api/health` to check backend availability. Authentication endpoints are `POST /api/auth/register` and `POST /api/auth/login`.
+
 ## Important
 - Uploaded media is stored in `backend/uploads`; keep this directory persistent and include it in backups. Local disk storage may not persist on some hosting providers, so configure persistent storage or cloud media storage before deploying there.
 - Do not share copyrighted videos without permission. Respect privacy and sacred/cultural contexts when posting ritual footage.
