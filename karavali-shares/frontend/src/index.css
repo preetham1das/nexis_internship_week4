@@ -61,6 +61,9 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 .sidebar-note p, .community-tip p { margin:7px 0 0; color:#758178; font-size:11px; line-height:1.65; }
 .feed-heading { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:2px 0 17px; }
 .feed-heading h2 { font-family:'Playfair Display',serif; font-size:24px; font-weight:600; margin:6px 0 0; letter-spacing:-.4px; }
+.feed-heading-actions { display:flex; align-items:center; gap:10px; }
+.share-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:0; border-radius:9px; padding:9px 11px; background:var(--maroon); color:var(--gold); font-size:11px; font-weight:700; white-space:nowrap; }
+.share-button:hover { background:#7b292f; }
 .feed-count { color:#7e8a81; font-size:11px; padding-bottom:4px; white-space:nowrap; }
 .posts-list { display:flex; flex-direction:column; gap:17px; }
 .post-card, .composer-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:17px; box-shadow:0 3px 12px rgba(25,55,40,.025); min-width:0; }
@@ -143,7 +146,7 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 @media (max-width: 680px) {
   .topbar { height:66px; padding:0 15px; } .brand-mark { width:38px;height:38px; } .brand strong { font-size:14px; } .brand small { font-size:8px; } .topbar nav { gap:2px; } .topbar nav a, .nav-button { padding:9px; font-size:11px; } .nav-user { display:none; }
   .page-shell { padding:16px 12px 38px; } .hero { min-height:0; padding:29px 23px; border-radius:17px; } .hero h1 { font-size:35px; } .hero p { font-size:12px; } .hero-badge { display:none; }
-  .feed-layout { display:block; margin-top:20px; } .sidebar { margin-bottom:20px; } .sidebar-card { display:flex; overflow-x:auto; gap:5px; padding:10px; } .sidebar-title { display:none; } .category-button { width:auto; flex:0 0 auto; white-space:nowrap; padding:9px 10px; } .sidebar-note { display:none; } .feed-heading h2 { font-size:22px; } .post-card, .composer-card { padding:13px; } .category-tag { font-size:8px; max-width:94px; overflow:hidden; text-overflow:ellipsis; } .post-heading { gap:7px; } .avatar { flex-basis:34px; width:34px;height:34px; } .form-grid { grid-template-columns:1fr; } .composer-bottom { align-items:flex-start; flex-direction:column; } .composer-bottom .primary-button { width:100%; }
+  .feed-layout { display:block; margin-top:20px; } .sidebar { margin-bottom:20px; } .sidebar-card { display:flex; overflow-x:auto; gap:5px; padding:10px; } .sidebar-title { display:none; } .category-button { width:auto; flex:0 0 auto; white-space:nowrap; padding:9px 10px; } .sidebar-note { display:none; } .feed-heading h2 { font-size:22px; } .feed-heading-actions { flex-direction:column; align-items:flex-end; gap:5px; } .share-button { padding:8px; font-size:10px; } .post-card, .composer-card { padding:13px; } .category-tag { font-size:8px; max-width:94px; overflow:hidden; text-overflow:ellipsis; } .post-heading { gap:7px; } .avatar { flex-basis:34px; width:34px;height:34px; } .form-grid { grid-template-columns:1fr; } .composer-bottom { align-items:flex-start; flex-direction:column; } .composer-bottom .primary-button { width:100%; }
   .auth-layout { grid-template-columns:1fr; margin:20px auto; padding:0 12px; min-height:0; } .auth-art { border-radius:17px 17px 0 0; padding:27px; min-height:240px; } .auth-icon { margin-bottom:20px; } .auth-art h1 { font-size:31px; } .auth-card { border-left:1px solid var(--line); border-radius:0 0 17px 17px; padding:28px 23px; } .auth-card h2 { font-size:24px; }
 }
 

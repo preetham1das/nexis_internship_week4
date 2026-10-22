@@ -254,7 +254,15 @@ export default function Feed() {
         </aside>
 
         <section className="feed-column">
-          <div className="feed-heading"><div><p className="eyebrow">COMMUNITY STORIES</p><h2>{activeCategory === "All" ? "The latest from Karavali" : activeCategory}</h2></div><span className="feed-count">{posts.length} posts</span></div>
+          <div className="feed-heading">
+            <div><p className="eyebrow">COMMUNITY STORIES</p><h2>{activeCategory === "All" ? "The latest from Karavali" : activeCategory}</h2></div>
+            <div className="feed-heading-actions">
+              {user && <button className="share-button" type="button" onClick={() => setShowComposer(value => !value)} aria-expanded={showComposer}>
+                <Plus size={16} /> {showComposer ? "Close form" : "Share your story"}
+              </button>}
+              <span className="feed-count">{posts.length} posts</span>
+            </div>
+          </div>
           {notice && <div className="notice-message">{notice}<button onClick={() => setNotice("")}>×</button></div>}
           {error && <div className="error-message">{error}<button onClick={() => setError("")}>×</button></div>}
 
