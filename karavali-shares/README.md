@@ -6,7 +6,7 @@ A beginner-friendly full-stack social media app for sharing coastal Karnataka cu
 - Frontend: React + Vite + JavaScript, React Router, Axios
 - Backend: Node.js, Express, MongoDB Atlas, Mongoose
 - Authentication: JWT + bcryptjs
-- Media: image/video uploads stored locally by the backend, or public URLs
+- Media: image/video uploads stored on the backend's configured disk, or public URLs
 
 ## Requirements
 - Node.js 18+
@@ -68,6 +68,9 @@ On Render, configure these backend environment variables:
 - `MONGO_URI` — your MongoDB Atlas connection string
 - `JWT_SECRET` — a long, random secret
 - `CLIENT_URL` — the exact deployed Vercel origin, for example `https://your-project.vercel.app` (no `/` or route after the hostname)
+- `UPLOAD_DIR=/var/data/uploads` — the directory for uploaded media on a Render persistent disk
+
+To keep device uploads available after restarts and deploys, attach a persistent disk to the Render backend with mount path `/var/data`, then set `UPLOAD_DIR` to `/var/data/uploads` and redeploy. Persistent disks require a Render plan that supports them; without one, the service's local filesystem is temporary and uploaded files can disappear. Keep existing uploads backed up or copy them to the disk before removing the old filesystem, if those files are still available.
 
 On Vercel, configure this frontend environment variable for Production:
 ```env
@@ -80,7 +83,7 @@ Render's `CLIENT_URL` allows only the configured origin, so Vercel preview deplo
 `GET /api` returning `Route not found` is expected: the API does not define a root `/api` route. Use `GET /api/health` to check backend availability. Authentication endpoints are `POST /api/auth/register` and `POST /api/auth/login`.
 
 ## Important
-- Uploaded media is stored in `backend/uploads`; keep this directory persistent and include it in backups. Local disk storage may not persist on some hosting providers, so configure persistent storage or cloud media storage before deploying there.
+- Uploaded media is stored in `backend/uploads` by default for local development. In production, set `UPLOAD_DIR` to persistent or cloud-backed storage and include it in backups; the backend reads and serves uploads from that same configured directory.
 - Do not share copyrighted videos without permission. Respect privacy and sacred/cultural contexts when posting ritual footage.
 - Before public deployment, add stronger moderation, rate limiting, pagination, and cloud media uploads.
 - For deployment, host the frontend on Vercel/Netlify, backend on Render, and use MongoDB Atlas. Set `CLIENT_URL` to your deployed frontend URL and `VITE_API_URL` to your deployed backend API URL.

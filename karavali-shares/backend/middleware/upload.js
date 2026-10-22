@@ -2,8 +2,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
-
-const uploadDirectory = path.join(__dirname, "..", "uploads");
+const { uploadDirectory } = require("../config/mediaStorage");
 const extensionsByMimeType = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
