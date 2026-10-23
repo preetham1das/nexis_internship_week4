@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema({
     default: "Other"
   },
   location: { type: String, trim: true, maxlength: 100, default: "" },
-  mediaUrl: { type: String, trim: true, default: "" },
+  mediaUrl: { type: String, trim: false, default: "" },
   mediaType: { type: String, enum: ["image", "video", "none"], default: "none" },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   comments: [commentSchema]

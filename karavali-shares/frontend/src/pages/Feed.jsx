@@ -63,9 +63,14 @@ function timeAgo(date) {
 function PostCard({ post, onLike, onComment, onDelete, user }) {
   const [comment, setComment] = useState("");
   const [commentBusy, setCommentBusy] = useState(false);
-  const mediaSource = post.mediaUrl?.startsWith("/")
-    ? new URL(post.mediaUrl, new URL(api.defaults.baseURL, window.location.origin)).href
-    : post.mediaUrl;
+  // Base64 data URL (data:image/...) → use directly — it's self-contained.
+  // Absolute http/https URL → use as-is.
+  // Legacy relative /uploads path → prepend backend origin.
+  const mediaSource = post.mediaUrl
+    ? (post.mediaUrl.startsWith("data:") || post.mediaUrl.startsWith("http"))
+      ? post.mediaUrl
+      : `${new URL(api.defaults.baseURL).origin}${post.mediaUrl}`
+    : null;
 
   async function sendComment(event) {
     event.preventDefault();
@@ -273,11 +278,11 @@ export default function Feed() {
               <label>Category<select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>{categories.filter(c => c !== "All").map(c => <option key={c}>{c}</option>)}</select></label>
               <label>Location (optional)<input value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="e.g. Udupi" maxLength={100} /></label>
             </div>
-            <label className="field-label">Choose a photo or video from your device (optional)<input ref={mediaInputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" onChange={event => {
+            <label className="field-label">Choose a photo from your device (optional)<input ref={mediaInputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => {
               const mediaFile = event.target.files?.[0];
               if (!mediaFile) return;
-              if (mediaFile && mediaFile.size > (mediaFile.type.startsWith("video/") ? 100 : 10) * 1024 * 1024) {
-                setError(mediaFile.type.startsWith("video/") ? "Videos must be 100 MB or smaller." : "Images must be 10 MB or smaller.");
+              if (mediaFile.size > 10 * 1024 * 1024) {
+                setError("Images must be 10 MB or smaller.");
                 event.target.value = "";
                 setForm({ ...form, mediaFile: null });
                 return;
@@ -288,7 +293,7 @@ export default function Feed() {
             {form.mediaFile && <p className="selected-media">{form.mediaFile.name} <button type="button" onClick={() => { if (mediaInputRef.current) mediaInputRef.current.value = ""; setForm({ ...form, mediaFile: null }); }}>Remove</button></p>}
             <label className="field-label">Or add a public photo/video URL<input type="url" value={form.mediaUrl} onChange={e => { if (mediaInputRef.current) mediaInputRef.current.value = ""; setForm({ ...form, mediaUrl: e.target.value, mediaFile: null }); }} placeholder="https://example.com/your-photo.jpg" /></label>
             {form.mediaUrl && <label className="media-type-choice">Media type <select value={form.mediaType} onChange={e => setForm({ ...form, mediaType: e.target.value })}><option value="image">Photo</option><option value="video">Video</option></select></label>}
-            <div className="composer-bottom"><span><ImageIcon size={16} /> Images up to 10 MB <Video size={16} /> Videos up to 100 MB</span><button className="primary-button" disabled={posting}>{posting ? "Sharing..." : "Publish post"}</button></div>
+            <div className="composer-bottom"><span><ImageIcon size={16} /> Images up to 10 MB &nbsp;<Video size={16} /> Videos via URL only</span><button className="primary-button" disabled={posting}>{posting ? "Sharing..." : "Publish post"}</button></div>
           </form>}
 
           {loading ? <div className="loading-state"><LoaderCircle className="spin" size={28} /><p>Loading community stories...</p></div> :

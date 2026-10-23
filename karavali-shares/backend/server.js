@@ -17,7 +17,7 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({ origin: allowedOrigins }));
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "15mb" }));
 app.use("/uploads", express.static(uploadDirectory));
 
 app.get("/", (_req, res) => {
@@ -34,7 +34,7 @@ app.use((err, _req, res, _next) => {
   console.error(err);
   const status = err.code === "LIMIT_FILE_SIZE" ? 413 : err.status || 500;
   const message = err.code === "LIMIT_FILE_SIZE"
-    ? "Media must be 100 MB or smaller."
+    ? "Images must be 10 MB or smaller."
     : err.message || "Server error";
   res.status(status).json({ message });
 });
